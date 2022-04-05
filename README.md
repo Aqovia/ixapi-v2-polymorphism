@@ -16,11 +16,12 @@ Root directory has following sub-dirs:
 
 Two generator frameworks/tools are used to generate client models for the previously menbtioned specs
 1. Openapi-Tools generator 
+   - https://github.com/OpenAPITools/openapi-generator
    - to use this for a specific code gen client
-   - `openapi-generator generate -g {client_type} -i {spec_file.yaml} -o {output_directory}
-   - Eg: `openapi-generator generate -g python -i animals.yaml -o python`
+   - `openapi-generator generate -g {client_type} -i {spec_file.yaml} -o {output_directory}`
+   - Eg: `openapi-generator generate -g python -i animals.yaml -o python`   
 3. SwaggerCodeGen online tool generator
-   - 
+   - https://editor.swagger.io/
    - paste the spec file into the online tool
    - select the client generation from the nav bar
    - download the zip file to observe generated models
