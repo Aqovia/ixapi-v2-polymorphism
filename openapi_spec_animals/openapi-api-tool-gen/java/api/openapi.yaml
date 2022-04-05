@@ -1,0 +1,52 @@
+openapi: 3.0.0
+info:
+  contact:
+    url: https://ix-api.net
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  title: IX-API
+  version: 2.3.0
+servers:
+- url: /
+paths: {}
+components:
+  schemas:
+    Pet:
+      discriminator:
+        mapping:
+          dog: Dog
+          lizard: Lizard
+          cat: Cat
+        propertyName: petType
+      properties:
+        petType:
+          type: string
+      required:
+      - petType
+      type: object
+    Cat:
+      allOf:
+      - $ref: '#/components/schemas/Pet'
+      - $ref: '#/components/schemas/Cat_allOf'
+    Dog:
+      allOf:
+      - $ref: '#/components/schemas/Pet'
+      - $ref: '#/components/schemas/Dog_allOf'
+    Lizard:
+      allOf:
+      - $ref: '#/components/schemas/Pet'
+      - $ref: '#/components/schemas/Lizard_allOf'
+    Cat_allOf:
+      properties:
+        name:
+          type: string
+    Dog_allOf:
+      properties:
+        bark:
+          type: string
+    Lizard_allOf:
+      properties:
+        lovesRocks:
+          type: boolean
+

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+IX-API
+
+ This API allows to config/change/delete Internet Exchange services.  # Filters  When querying collections, the provided query parameters are validated. Unknown query parameters are ignored. Providing invalid filter values should yield a validation error. 
+
+The version of the OpenAPI document: 2.2.0
+
+-->
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Org.OpenAPITools.Test</RootNamespace>
+    <AssemblyName>Org.OpenAPITools.Test</AssemblyName>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Org.OpenAPITools\Org.OpenAPITools.csproj">
+      <Project>{993F9760-4A33-415D-B903-6939D39705C8}</Project>
+      <Name>Org.OpenAPITools</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>
+

@@ -1,0 +1,1232 @@
+components:
+  schemas:
+    CloudNetworkService:
+      allOf:
+        - $ref: "#/components/schemas/CloudNetworkServicePartial"
+        - required:
+            - state
+            - id
+            - product_offering
+            - managing_account
+            - consuming_account
+            - billing_account
+            - cloud_key
+            - diversity
+            - provider_ref
+            - type
+          title: CloudNetworkService
+          type: object
+    CloudNetworkServicePartial:
+      description: Cloud Network Service
+      properties:
+        billing_account:
+          description: An account requires billing_information to be used as a `billing_account`.
+          type: string
+        capacity:
+          description: "The capacity of the service in Mbps. When null,
+
+            the maximum capacity will be used."
+          minimum: 1
+          nullable: true
+          type: integer
+        charged_until:
+          description:
+            "Your obligation to pay for the service will end on this date.\n\
+            Typically `\u2265 decommission_at`.\n\nThis field is only used when\n\
+            the state is `DECOMMISSION_REQUESTED` or\n`DECOMMISSIONED`."
+          format: date
+          type: string
+        cloud_key:
+          type: string
+        consuming_account:
+          description: "The `id` of the account consuming a service.
+
+
+            Used to be `owning_customer`.
+
+            "
+          example: "2381982"
+          type: string
+        contract_ref:
+          description:
+            "A reference to a contract. If no specific contract is used,
+            a default
+
+            MAY be chosen by the implementer.
+
+            "
+          example: contract:31824
+          maxLength: 128
+          nullable: true
+          type: string
+        decommission_at:
+          description: "The service will be decommissioned on this date.
+
+
+            This field is only used when
+
+            the state is `DECOMMISSION_REQUESTED` or
+
+            `DECOMMISSIONED`."
+          format: date
+          type: string
+        diversity:
+          description: "Same value as the corresponding `ProductOffering`.
+
+
+            The service can be delivered over multiple handovers from
+
+            the exchange to the `service_provider`.
+
+
+            The `diversity` denotes the number of handovers between the
+
+            exchange and the service provider. A value of two signals a
+
+            redundant service.
+
+
+            Only one network service configuration for each `handover` and
+
+            `cloud_vlan` can be created."
+          minimum: 1
+          type: integer
+        external_ref:
+          description: Reference field, free to use for the API user.
+          example: IX:Service:23042
+          maxLength: 128
+          nullable: true
+          type: string
+        id:
+          type: string
+        managing_account:
+          description:
+            "The `id` of the account responsible for managing the service
+            via
+
+            the API. A manager can read and update the state of entities.
+
+            "
+          example: "238189294"
+          type: string
+        nsc_required_contact_roles:
+          description:
+            "The configuration will require at least one of each of the
+
+            specified roles assigned to contacts.
+
+
+            The `RoleAssignment` is associated through the
+
+            `role_assignments` list property of the network service configuration."
+          items:
+            type: string
+          readOnly: true
+          type: array
+        product_offering:
+          type: string
+        provider_ref:
+          description: "For a cloud network service with the exchange first
+
+            workflow, the `provider_ref` will be a reference
+
+            to a resource of the cloud provider. (E.g. the UUID of
+
+            a virtual circuit.)
+
+
+            The `provider_ref` is managed by the exchange and its
+
+            meaning may vary between different cloud services.
+
+            "
+          example: 331050d5-76fb-498b-b72a-248520278fbd
+          nullable: true
+          type: string
+        purchase_order:
+          default: ""
+          description:
+            "Purchase Order ID which will be displayed on the invoice.
+
+            "
+          example: "Project: DC Moon"
+          maxLength: 80
+          type: string
+        state:
+          enum:
+            - requested
+            - allocated
+            - testing
+            - production
+            - production_change_pending
+            - decommission_requested
+            - decommissioned
+            - archived
+            - error
+            - operator
+            - scheduled
+            - cancelled
+          type: string
+        status:
+          items:
+            $ref: "#/components/schemas/Status"
+          type: array
+        type:
+          example: cloud_vc
+          type: string
+      required:
+        - type
+      title: PartialCloudNetworkService
+      type: object
+    ExchangeLanNetworkService:
+      allOf:
+        - $ref: "#/components/schemas/ExchangeLanNetworkServicePartial"
+        - required:
+            - state
+            - id
+            - managing_account
+            - consuming_account
+            - name
+            - metro_area_network
+            - network_features
+            - subnet_v4
+            - subnet_v6
+            - type
+          title: ExchangeLanNetworkService
+          type: object
+    ExchangeLanNetworkServicePartial:
+      description: Exchange Lan Network Service
+      properties:
+        consuming_account:
+          description: "The `id` of the account consuming a service.
+
+
+            Used to be `owning_customer`.
+
+            "
+          example: "2381982"
+          type: string
+        external_ref:
+          description: Reference field, free to use for the API user.
+          example: IX:Service:23042
+          maxLength: 128
+          nullable: true
+          type: string
+        id:
+          type: string
+        ixfdb_ixid:
+          description: id of ixfdb
+          nullable: true
+          type: integer
+        managing_account:
+          description:
+            "The `id` of the account responsible for managing the service
+            via
+
+            the API. A manager can read and update the state of entities.
+
+            "
+          example: "238189294"
+          type: string
+        metro_area_network:
+          description: "Id of the `MetroAreaNetwork` where
+
+            the exchange lan network service is directly provided.
+
+
+            Same as `service_metro_area_network` on the related
+
+            `ProductOffering`.
+
+            "
+          example: man:293225:LON2
+          type: string
+        name:
+          description: Exchange-dependent service name, will be shown on the invoice.
+          maxLength: 40
+          type: string
+        network_features:
+          items:
+            type: string
+          type: array
+        nsc_required_contact_roles:
+          description:
+            "The configuration will require at least one of each of the
+
+            specified roles assigned to contacts.
+
+
+            The `RoleAssignment` is associated through the
+
+            `role_assignments` list property of the network service configuration."
+          items:
+            type: string
+          readOnly: true
+          type: array
+        peeringdb_ixid:
+          description: PeeringDB ixid
+          nullable: true
+          type: integer
+        product_offering:
+          type: string
+        state:
+          enum:
+            - requested
+            - allocated
+            - testing
+            - production
+            - production_change_pending
+            - decommission_requested
+            - decommissioned
+            - archived
+            - error
+            - operator
+            - scheduled
+            - cancelled
+          type: string
+        status:
+          items:
+            $ref: "#/components/schemas/Status"
+          type: array
+        subnet_v4:
+          description:
+            "IPv4 subnet in [dot-decimal notation](https://en.wikipedia.org/wiki/Dot-decimal_notation)
+
+            CIDR notation.
+
+            "
+          example: 23.142.52.0/21
+          type: string
+        subnet_v6:
+          description:
+            "IPv6 subnet in hexadecimal colon separated CIDR notation.
+
+            "
+          example: 2001:23:42::/48
+          type: string
+        type:
+          example: exchange_lan
+          type: string
+      required:
+        - type
+      title: PartialExchangeLanNetworkService
+      type: object
+    MP2MPNetworkService:
+      allOf:
+        - $ref: "#/components/schemas/MP2MPNetworkServicePartial"
+        - required:
+            - state
+            - id
+            - product_offering
+            - managing_account
+            - consuming_account
+            - billing_account
+            - name
+            - member_joining_rules
+            - network_features
+            - type
+          title: MP2MPNetworkService
+          type: object
+    MP2MPNetworkServicePartial:
+      description: MP2MP Network Service
+      properties:
+        billing_account:
+          description: An account requires billing_information to be used as a `billing_account`.
+          type: string
+        charged_until:
+          description:
+            "Your obligation to pay for the service will end on this date.\n\
+            Typically `\u2265 decommission_at`.\n\nThis field is only used when\n\
+            the state is `DECOMMISSION_REQUESTED` or\n`DECOMMISSIONED`."
+          format: date
+          type: string
+        consuming_account:
+          description: "The `id` of the account consuming a service.
+
+
+            Used to be `owning_customer`.
+
+            "
+          example: "2381982"
+          type: string
+        contract_ref:
+          description:
+            "A reference to a contract. If no specific contract is used,
+            a default
+
+            MAY be chosen by the implementer.
+
+            "
+          example: contract:31824
+          maxLength: 128
+          nullable: true
+          type: string
+        decommission_at:
+          description: "The service will be decommissioned on this date.
+
+
+            This field is only used when
+
+            the state is `DECOMMISSION_REQUESTED` or
+
+            `DECOMMISSIONED`."
+          format: date
+          type: string
+        external_ref:
+          description: Reference field, free to use for the API user.
+          example: IX:Service:23042
+          maxLength: 128
+          nullable: true
+          type: string
+        id:
+          type: string
+        managing_account:
+          description:
+            "The `id` of the account responsible for managing the service
+            via
+
+            the API. A manager can read and update the state of entities.
+
+            "
+          example: "238189294"
+          type: string
+        member_joining_rules:
+          items:
+            type: string
+          type: array
+        name:
+          description: "Name of the multi-point to multi-point
+
+            virtual circuit."
+          maxLength: 40
+          type: string
+        network_features:
+          items:
+            type: string
+          type: array
+        nsc_required_contact_roles:
+          description:
+            "The configuration will require at least one of each of the
+
+            specified roles assigned to contacts.
+
+
+            The `RoleAssignment` is associated through the
+
+            `role_assignments` list property of the network service configuration."
+          items:
+            type: string
+          readOnly: true
+          type: array
+        product_offering:
+          type: string
+        public:
+          default: false
+          description: "A public mp2mp network service can be joined
+
+            by everyone on the exchange unless denied by
+
+            a member-joining-rule.
+
+
+            Public network services are visible to other
+
+            members of the IXP, however only `name`, `type`,
+
+            `product_offering`, `consuming_account` and
+
+            `managing_account` are made available.
+
+
+            Other required fields are redacted."
+          type: boolean
+        purchase_order:
+          default: ""
+          description:
+            "Purchase Order ID which will be displayed on the invoice.
+
+            "
+          example: "Project: DC Moon"
+          maxLength: 80
+          type: string
+        state:
+          enum:
+            - requested
+            - allocated
+            - testing
+            - production
+            - production_change_pending
+            - decommission_requested
+            - decommissioned
+            - archived
+            - error
+            - operator
+            - scheduled
+            - cancelled
+          type: string
+        status:
+          items:
+            $ref: "#/components/schemas/Status"
+          type: array
+        type:
+          example: mp2mp_vc
+          type: string
+      required:
+        - type
+      title: PartialMP2MPNetworkService
+      type: object
+    NetworkService:
+      description: Polymorphic Network Services
+      discriminator:
+        mapping:
+          cloud_vc: "#/components/schemas/CloudNetworkService"
+          exchange_lan: "#/components/schemas/ExchangeLanNetworkService"
+          mp2mp_vc: "#/components/schemas/MP2MPNetworkService"
+          p2mp_vc: "#/components/schemas/P2MPNetworkService"
+          p2p_vc: "#/components/schemas/P2PNetworkService"
+        propertyName: type
+      oneOf:
+        - $ref: "#/components/schemas/ExchangeLanNetworkService"
+        - $ref: "#/components/schemas/P2PNetworkService"
+        - $ref: "#/components/schemas/P2MPNetworkService"
+        - $ref: "#/components/schemas/MP2MPNetworkService"
+        - $ref: "#/components/schemas/CloudNetworkService"
+      required:
+        - type
+      title: NetworkService
+    NetworkServicePartial:
+      description: Polymorphic Network Services
+      discriminator:
+        mapping:
+          cloud_vc: "#/components/schemas/CloudNetworkServicePartial"
+          exchange_lan: "#/components/schemas/ExchangeLanNetworkServicePartial"
+          mp2mp_vc: "#/components/schemas/MP2MPNetworkServicePartial"
+          p2mp_vc: "#/components/schemas/P2MPNetworkServicePartial"
+          p2p_vc: "#/components/schemas/P2PNetworkServicePartial"
+        propertyName: type
+      oneOf:
+        - $ref: "#/components/schemas/ExchangeLanNetworkServicePartial"
+        - $ref: "#/components/schemas/P2PNetworkServicePartial"
+        - $ref: "#/components/schemas/P2MPNetworkServicePartial"
+        - $ref: "#/components/schemas/MP2MPNetworkServicePartial"
+        - $ref: "#/components/schemas/CloudNetworkServicePartial"
+      required:
+        - type
+      title: NetworkService (partial)
+    P2MPNetworkService:
+      allOf:
+        - $ref: "#/components/schemas/P2MPNetworkServicePartial"
+        - required:
+            - state
+            - id
+            - product_offering
+            - managing_account
+            - consuming_account
+            - billing_account
+            - name
+            - network_features
+            - member_joining_rules
+            - type
+          title: P2MPNetworkService
+          type: object
+    P2MPNetworkServicePartial:
+      description: P2MP Network Service
+      properties:
+        billing_account:
+          description: An account requires billing_information to be used as a `billing_account`.
+          type: string
+        charged_until:
+          description:
+            "Your obligation to pay for the service will end on this date.\n\
+            Typically `\u2265 decommission_at`.\n\nThis field is only used when\n\
+            the state is `DECOMMISSION_REQUESTED` or\n`DECOMMISSIONED`."
+          format: date
+          type: string
+        consuming_account:
+          description: "The `id` of the account consuming a service.
+
+
+            Used to be `owning_customer`.
+
+            "
+          example: "2381982"
+          type: string
+        contract_ref:
+          description:
+            "A reference to a contract. If no specific contract is used,
+            a default
+
+            MAY be chosen by the implementer.
+
+            "
+          example: contract:31824
+          maxLength: 128
+          nullable: true
+          type: string
+        decommission_at:
+          description: "The service will be decommissioned on this date.
+
+
+            This field is only used when
+
+            the state is `DECOMMISSION_REQUESTED` or
+
+            `DECOMMISSIONED`."
+          format: date
+          type: string
+        external_ref:
+          description: Reference field, free to use for the API user.
+          example: IX:Service:23042
+          maxLength: 128
+          nullable: true
+          type: string
+        id:
+          type: string
+        managing_account:
+          description:
+            "The `id` of the account responsible for managing the service
+            via
+
+            the API. A manager can read and update the state of entities.
+
+            "
+          example: "238189294"
+          type: string
+        member_joining_rules:
+          items:
+            type: string
+          type: array
+        name:
+          description: Name of the point to multi-point virtual circuit.
+          maxLength: 40
+          type: string
+        network_features:
+          items:
+            type: string
+          type: array
+        nsc_required_contact_roles:
+          description:
+            "The configuration will require at least one of each of the
+
+            specified roles assigned to contacts.
+
+
+            The `RoleAssignment` is associated through the
+
+            `role_assignments` list property of the network service configuration."
+          items:
+            type: string
+          readOnly: true
+          type: array
+        product_offering:
+          type: string
+        public:
+          default: false
+          description: "A public p2mp network service can be joined
+
+            by everyone on the exchange unless denied by
+
+            a member-joining-rule.
+
+
+            Public network services are visible to other
+
+            members of the IXP, however only `name`, `type`,
+
+            `product_offering`, `consuming_account` and
+
+            `managing_account` are made
+
+            available.
+
+
+            Other required fields are redacted."
+          type: boolean
+        purchase_order:
+          default: ""
+          description:
+            "Purchase Order ID which will be displayed on the invoice.
+
+            "
+          example: "Project: DC Moon"
+          maxLength: 80
+          type: string
+        state:
+          enum:
+            - requested
+            - allocated
+            - testing
+            - production
+            - production_change_pending
+            - decommission_requested
+            - decommissioned
+            - archived
+            - error
+            - operator
+            - scheduled
+            - cancelled
+          type: string
+        status:
+          items:
+            $ref: "#/components/schemas/Status"
+          type: array
+        type:
+          example: p2mp_vc
+          type: string
+      required:
+        - type
+      title: PartialP2MPNetworkService
+      type: object
+    P2PNetworkService:
+      allOf:
+        - $ref: "#/components/schemas/P2PNetworkServicePartial"
+        - required:
+            - state
+            - id
+            - product_offering
+            - managing_account
+            - consuming_account
+            - billing_account
+            - joining_member_account
+            - type
+          title: P2PNetworkService
+          type: object
+    P2PNetworkServicePartial:
+      description: P2P Network Service
+      properties:
+        billing_account:
+          description: An account requires billing_information to be used as a `billing_account`.
+          type: string
+        capacity:
+          description: "The capacity of the service in Mbps. When null,
+
+            the maximum capacity will be used."
+          minimum: 1
+          nullable: true
+          type: integer
+        charged_until:
+          description:
+            "Your obligation to pay for the service will end on this date.\n\
+            Typically `\u2265 decommission_at`.\n\nThis field is only used when\n\
+            the state is `DECOMMISSION_REQUESTED` or\n`DECOMMISSIONED`."
+          format: date
+          type: string
+        consuming_account:
+          description: "The `id` of the account consuming a service.
+
+
+            Used to be `owning_customer`.
+
+            "
+          example: "2381982"
+          type: string
+        contract_ref:
+          description:
+            "A reference to a contract. If no specific contract is used,
+            a default
+
+            MAY be chosen by the implementer.
+
+            "
+          example: contract:31824
+          maxLength: 128
+          nullable: true
+          type: string
+        decommission_at:
+          description: "The service will be decommissioned on this date.
+
+
+            This field is only used when
+
+            the state is `DECOMMISSION_REQUESTED` or
+
+            `DECOMMISSIONED`."
+          format: date
+          type: string
+        external_ref:
+          description: Reference field, free to use for the API user.
+          example: IX:Service:23042
+          maxLength: 128
+          nullable: true
+          type: string
+        id:
+          type: string
+        joining_member_account:
+          description:
+            "The account of the B-side member joining the virtual circuit.
+
+            "
+          example: "231829"
+          type: string
+        managing_account:
+          description:
+            "The `id` of the account responsible for managing the service
+            via
+
+            the API. A manager can read and update the state of entities.
+
+            "
+          example: "238189294"
+          type: string
+        nsc_required_contact_roles:
+          description:
+            "The configuration will require at least one of each of the
+
+            specified roles assigned to contacts.
+
+
+            The `RoleAssignment` is associated through the
+
+            `role_assignments` list property of the network service configuration."
+          items:
+            type: string
+          readOnly: true
+          type: array
+        product_offering:
+          type: string
+        purchase_order:
+          default: ""
+          description:
+            "Purchase Order ID which will be displayed on the invoice.
+
+            "
+          example: "Project: DC Moon"
+          maxLength: 80
+          type: string
+        state:
+          enum:
+            - requested
+            - allocated
+            - testing
+            - production
+            - production_change_pending
+            - decommission_requested
+            - decommissioned
+            - archived
+            - error
+            - operator
+            - scheduled
+            - cancelled
+          type: string
+        status:
+          items:
+            $ref: "#/components/schemas/Status"
+          type: array
+        type:
+          example: p2p_vc
+          type: string
+      required:
+        - type
+      title: PartialP2PNetworkService
+      type: object
+    Status:
+      allOf:
+        - $ref: "#/components/schemas/StatusPartial"
+        - required:
+            - severity
+            - tag
+            - message
+            - attrs
+            - timestamp
+          title: Status
+          type: object
+    StatusPartial:
+      description: Status Message
+      properties:
+        attrs:
+          type: object
+        message:
+          type: string
+        severity:
+          description: "We are using syslog severity levels: 0 = Emergency,
+
+            1 = Alert, 2 = Critical, 3 = Error, 4 = Warning,
+
+            5 = Notice, 6 = Informational, 7 = Debug.
+
+            "
+          example: 2
+          format: int32
+          maximum: 7
+          minimum: 0
+          type: integer
+        tag:
+          type: string
+        timestamp:
+          format: date-time
+          type: string
+      title: PartialStatus
+      type: object
+    VLanConfigDot1Q:
+      allOf:
+        - $ref: "#/components/schemas/VLanConfigDot1QPartial"
+        - required:
+            - vlan_type
+          title: VLanConfigDot1Q
+          type: object
+    VLanConfigDot1QPartial:
+      description: A Dot1Q vlan configuration
+      properties:
+        vlan:
+          description: "A VLAN tag. If `null`, the IXP will auto-select
+
+            a valid vlan-id.
+
+            "
+          example: 23
+          format: int32
+          maximum: 4094
+          minimum: 1
+          nullable: true
+          type: integer
+        vlan_ethertype:
+          default: "0x8100"
+          description: The ethertype of the vlan in hexadecimal notation.
+          enum:
+            - "0x8100"
+            - "0x88a8"
+            - "0x9100"
+          type: string
+        vlan_type:
+          example: dot1q
+          type: string
+      required:
+        - vlan_type
+      title: PartialVLanConfigDot1Q
+      type: object
+    VLanConfigPort:
+      allOf:
+        - $ref: "#/components/schemas/VLanConfigPortPartial"
+        - required:
+            - vlan_type
+          title: VLanConfigPort
+          type: object
+    VLanConfigPortPartial:
+      description: A Port vlan configuration
+      properties:
+        vlan_type:
+          example: port
+          type: string
+      required:
+        - vlan_type
+      title: PartialVLanConfigPort
+      type: object
+    VLanConfigQinQ:
+      allOf:
+        - $ref: "#/components/schemas/VLanConfigQinQPartial"
+        - required:
+            - vlan_type
+          title: VLanConfigQinQ
+          type: object
+    VLanConfigQinQPartial:
+      description: A QinQ vlan configuration
+      properties:
+        inner_vlan:
+          description: "The inner VLAN id.
+
+            "
+          example: 200
+          format: int32
+          maximum: 4094
+          minimum: 1
+          type: integer
+        outer_vlan:
+          description: "The outer VLAN id.
+
+            If `null`, the IXP will auto-select
+
+            a valid vlan-id.
+
+            "
+          example: 200
+          format: int32
+          maximum: 4094
+          minimum: 1
+          nullable: true
+          type: integer
+        outer_vlan_ethertype:
+          default: "0x8100"
+          description: The ethertype of the outer tag in hexadecimal notation.
+          enum:
+            - "0x8100"
+            - "0x88a8"
+            - "0x9100"
+          type: string
+        vlan_type:
+          example: dot1q
+          type: string
+      required:
+        - vlan_type
+      title: PartialVLanConfigQinQ
+      type: object
+    VlanConfig:
+      description: "The vlan configuration defines how the service
+
+        is made available on the connection."
+      discriminator:
+        mapping:
+          dot1q: "#/components/schemas/VLanConfigDot1Q"
+          port: "#/components/schemas/VLanConfigPort"
+          qinq: "#/components/schemas/VLanConfigQinQ"
+        propertyName: vlan_type
+      oneOf:
+        - $ref: "#/components/schemas/VLanConfigDot1Q"
+        - $ref: "#/components/schemas/VLanConfigQinQ"
+        - $ref: "#/components/schemas/VLanConfigPort"
+      required:
+        - vlan_type
+      title: VlanConfig
+    VlanConfigPartial:
+      description: "The vlan configuration defines how the service
+
+        is made available on the connection."
+      discriminator:
+        mapping:
+          dot1q: "#/components/schemas/VLanConfigDot1QPartial"
+          port: "#/components/schemas/VLanConfigPortPartial"
+          qinq: "#/components/schemas/VLanConfigQinQPartial"
+        propertyName: vlan_type
+      oneOf:
+        - $ref: "#/components/schemas/VLanConfigDot1QPartial"
+        - $ref: "#/components/schemas/VLanConfigQinQPartial"
+        - $ref: "#/components/schemas/VLanConfigPortPartial"
+      required:
+        - vlan_type
+      title: VlanConfig (partial)
+    ProblemResponse:
+      allOf:
+        - $ref: "#/components/schemas/ProblemResponsePartial"
+        - required:
+            - type
+          title: ProblemResponse
+          type: object
+    ProblemResponsePartial:
+      description: Encodes a problem into an appropriate response body.
+      properties:
+        detail:
+          description: "A human-readable explanation specific to this
+
+            occurrence of the problem."
+          type: string
+        instance:
+          description: "A URI reference that identifies the specific
+
+            occurrence of the problem.  It may or may not yield
+
+            further information if dereferenced."
+          type: string
+        status:
+          description: "The HTTP status code ([RFC7231], Section 6)
+
+            generated by the origin server for this occurrence
+
+            of the problem."
+          minimum: 100
+          type: integer
+        title:
+          description: "A short, human-readable summary of the problem type.
+
+
+            It SHOULD NOT change from occurrence to
+
+            occurrence of the problem, except for purposes
+
+            of localization (e.g., using proactive content
+
+            negotiation; see [RFC7231], Section 3.4).
+
+            "
+          example: Some fields have validation errors.
+          type: string
+        type:
+          description: 'A URI reference (see RFC3986) that identifies the
+
+            problem type.
+
+
+            This specification encourages that, when
+
+            dereferenced, it provide human-readable documentation
+
+            for the problem type (e.g., using HTML
+
+            [W3C.REC-html5-20141028]).
+
+
+            When this member is not present, its value is assumed
+
+            to be "about:blank".
+
+            '
+          example: about:blank
+          type: string
+      title: PartialProblemResponse
+      type: object
+
+  securitySchemes:
+    Bearer:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http
+info:
+  contact:
+    url: https://ix-api.net
+  description: "
+
+    This API allows to config/change/delete Internet Exchange services.
+
+
+    # Filters
+
+
+    When querying collections, the provided query parameters
+
+    are validated. Unknown query parameters are ignored.
+
+    Providing invalid filter values should yield a validation error.
+
+    "
+  title: IX-API
+  version: 2.2.0
+openapi: 3.0.0
+paths:
+  /network-services:
+    get:
+      description: List available `NetworkService`s.
+      operationId: network_services_list
+      parameters:
+        - description: Filter by id
+          explode: false
+          in: query
+          name: id
+          required: false
+          schema:
+            example: id1,id2,id3
+            items:
+              type: string
+            type: array
+          style: form
+        - description: Filter by state
+          in: query
+          name: state
+          required: false
+          schema:
+            type: string
+        - description: Filter by state__is_not
+          in: query
+          name: state__is_not
+          required: false
+          schema:
+            type: string
+        - description: Filter by managing_account
+          in: query
+          name: managing_account
+          required: false
+          schema:
+            type: string
+        - description: Filter by consuming_account
+          in: query
+          name: consuming_account
+          required: false
+          schema:
+            type: string
+        - description: Filter by external_ref
+          in: query
+          name: external_ref
+          required: false
+          schema:
+            type: string
+        - description: Filter by type
+          in: query
+          name: type
+          required: false
+          schema:
+            enum:
+              - exchange_lan
+              - p2p_vc
+              - p2mp_vc
+              - mp2mp_vc
+              - cloud_vc
+            type: string
+        - description: Filter by pop
+          in: query
+          name: pop
+          required: false
+          schema:
+            type: string
+        - description: Filter by product_offering
+          in: query
+          name: product_offering
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/NetworkService"
+                type: array
+          description: "List of: Polymorphic Network Services"
+        400:
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ProblemResponse"
+                  - properties:
+                      status:
+                        example: 400
+                      title:
+                        example: Some fields did not validate.
+                      type:
+                        enum:
+                          - https://errors.ix-api.net/v2/validation-error.html
+                        type: string
+                    type: object
+                  - {}
+          description: ValidationError
+        401:
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ProblemResponse"
+                  - properties:
+                      status:
+                        example: 401
+                      title:
+                        example: Authentication Credentials Invalid
+                      type:
+                        enum:
+                          - https://errors.ix-api.net/v2/authentication-error.html
+                          - https://errors.ix-api.net/v2/signature-expired.html
+                        type: string
+                    type: object
+                  - {}
+          description: Authentication
+        403:
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ProblemResponse"
+                  - properties:
+                      status:
+                        example: 403
+                      title:
+                        example: You do not have permission to perform this action.
+                      type:
+                        enum:
+                          - https://errors.ix-api.net/v2/permission-denied.html
+                        type: string
+                    type: object
+                  - {}
+          description: PermissionDenied
+      tags:
+        - network-services
+security:
+  - Bearer: []
+servers:
+  - url: /api/v2
